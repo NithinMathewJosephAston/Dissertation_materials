@@ -1,6 +1,7 @@
 import spacy
-import random
 import json
+import random
+from spacy import displacy
 from spacy.training.example import Example
 
 
@@ -23,7 +24,7 @@ def train_spacy(dataset, iterations):
         optimizer = nlp.begin_training()
         for itn in range(iterations):
             print("Starting iteration " + str(itn))
-            # random.shuffle(dataset)
+            random.shuffle(dataset["annotations"])
             losses = {}
             for annotations in dataset["annotations"]:
                 doc = nlp.make_doc(annotations[0])
@@ -50,6 +51,7 @@ if __name__=='__main__':
     with open("data_crunching_1.txt", 'r') as test_dataset:
         test_text = test_dataset.read()
     doc = legal_model(test_text)
+    # displacy.serve(doc, style="ent")
     for ent in doc.ents:
         print(ent.text, ent.start_char, ent.end_char, ent.label_)
     pass
